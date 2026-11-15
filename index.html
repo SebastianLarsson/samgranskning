@@ -1880,14 +1880,14 @@
             <option value="alla">📋 Alla statusar</option>
             <option value="aktiva">⚡ Alla aktiva (ej hanterade)</option>
             <option value="hanterade">✅ Alla hanterade / avslutade</option>
-            <optgroup label="Granskningsstatusar">
-              <option value="Ny kommentar">🩷 Ny kommentar</option>
-              <option value="Ska åtgärdas">🔴 Ska åtgärdas</option>
-              <option value="Har åtgärdats">🟢 Har åtgärdats</option>
-              <option value="Avvisad">⬛ Avvisad</option>
-              <option value="Ny granskning">🟠 Ny granskning</option>
-              <option value="Annat forum eller skede">🔵 Annat forum eller skede</option>
-            </optgroup>
+<optgroup label="Granskningsstatusar">
+  <option value="Ny kommentar" style="color: #ec4899; font-weight: 600;">● Ny kommentar</option>
+  <option value="Ska åtgärdas" style="color: #dc2626; font-weight: 600;">● Ska åtgärdas</option>
+  <option value="Har åtgärdats" style="color: #16a34a; font-weight: 600;">● Har åtgärdats</option>
+  <option value="Avvisad" style="color: #475569; font-weight: 600;">● Avvisad</option>
+  <option value="Ny granskning" style="color: #ea580c; font-weight: 600;">● Ny granskning</option>
+  <option value="Annat forum eller skede" style="color: #2563eb; font-weight: 600;">● Annat forum eller skede</option>
+</optgroup>
           </select>
         </div>
       </div>
@@ -3398,11 +3398,11 @@
     vaxlaSynlighetKnapp.addEventListener('click', async () => {
       kommentarerSynliga = !kommentarerSynliga;
       if (kommentarerSynliga) {
-        vaxlaSynlighetKnapp.textContent = '👁️ Dölj kommentarer';
+        vaxlaSynlighetKnapp.textContent = 'Dölj kommentarer';
         vaxlaSynlighetKnapp.classList.remove('avstangd');
         if (kommentarSidopanel) kommentarSidopanel.classList.remove('dold');
       } else {
-        vaxlaSynlighetKnapp.textContent = '👁️‍🗨️ Visa kommentarer';
+        vaxlaSynlighetKnapp.textContent = 'Visa kommentarer';
         vaxlaSynlighetKnapp.classList.add('avstangd');
         if (kommentarSidopanel) kommentarSidopanel.classList.add('dold');
         stangAktivPopruta();
