@@ -2084,10 +2084,10 @@
               <th class="sorterbar" data-kolumn-id="lokaltNr" data-sort-kolumn="lokaltNr">Nr (i PDF) <span class="sorterings-pil">↕</span></th>
               <th class="sorterbar" data-kolumn-id="filnamn" data-sort-kolumn="filnamn">PDF-dokument <span class="sorterings-pil">↕</span></th>
               <th class="sorterbar" data-kolumn-id="sida" data-sort-kolumn="sida">Sida <span class="sorterings-pil">↕</span></th>
+			  <th class="sorterbar" data-kolumn-id="forfattare" data-sort-kolumn="forfattare">Författare (E-post) <span class="sorterings-pil">↕</span></th>
+              <th class="sorterbar" data-kolumn-id="kommentar" data-sort-kolumn="kommentar">Kommentar <span class="sorterings-pil">↕</span></th>
               <th class="sorterbar" data-kolumn-id="status" data-sort-kolumn="status">Status <span class="sorterings-pil">↕</span></th>
               <th class="sorterbar" data-kolumn-id="atgardare" data-sort-kolumn="atgardare">Åtgärdare <span class="sorterings-pil">↕</span></th>
-              <th class="sorterbar" data-kolumn-id="forfattare" data-sort-kolumn="forfattare">Författare (E-post) <span class="sorterings-pil">↕</span></th>
-              <th class="sorterbar" data-kolumn-id="kommentar" data-sort-kolumn="kommentar">Kommentar <span class="sorterings-pil">↕</span></th>
               <th class="sorterbar" data-kolumn-id="svar" data-sort-kolumn="svar">Svar / Tråd <span class="sorterings-pil">↕</span></th>
               <th class="sorterbar" data-kolumn-id="skapadVid" data-sort-kolumn="skapadVid">Skapad datum <span class="sorterings-pil">↕</span></th>
               <th class="sorterbar" data-kolumn-id="beskrivning" data-sort-kolumn="beskrivning">Statusbeskrivning <span class="sorterings-pil">↕</span></th>
@@ -2169,10 +2169,10 @@
       { id: 'lokaltNr', etikett: 'Nr (i PDF)', standardSynlig: true },
       { id: 'filnamn', etikett: 'PDF-dokument', standardSynlig: true },
       { id: 'sida', etikett: 'Sida', standardSynlig: true },
+	  { id: 'forfattare', etikett: 'Författare (E-post)', standardSynlig: true },
+      { id: 'kommentar', etikett: 'Kommentar', standardSynlig: true },
       { id: 'status', etikett: 'Status', standardSynlig: true },
       { id: 'atgardare', etikett: 'Åtgärdare', standardSynlig: true },
-      { id: 'forfattare', etikett: 'Författare (E-post)', standardSynlig: true },
-      { id: 'kommentar', etikett: 'Kommentar', standardSynlig: true },
       { id: 'svar', etikett: 'Svar / Tråd', standardSynlig: true },
       { id: 'skapadVid', etikett: 'Skapad datum', standardSynlig: true },
       { id: 'beskrivning', etikett: 'Statusbeskrivning', standardSynlig: false },
@@ -6132,7 +6132,88 @@
         const tdSida = skapaTabellCell('sida');
         tdSida.textContent = k.sida;
         tr.appendChild(tdSida);
+// 8. Författare (E-post)
+        const tdForfattare = skapaTabellCell('forfattare');
+        tdForfattare.style.fontWeight = '600';
+        tdForfattare.textContent = k.forfattare;
+        tr.appendChild(tdForfattare);
 
+        // 9. Kommentar
+        const tdKommentar = skapaTabellCell('kommentar');
+        tdKommentar.classList.add('cell-kommentar');
+
+        if (aktivTabellRedigeraNyckel === radUnikNyckel) {
+          const redigeraBox = document.createElement('div');
+          redigeraBox.className = 'tabell-redigera-box';
+          redigeraBox.addEventListener('click', (e) => e.stopPropagation());
+
+          const textruta = document.createElement('textarea');
+          textruta.value = k.innehall;
+
+          const knappRad = document.createElement('div');
+          knappRad.className = 'svar-formular-knappar';
+
+          const avbrytKnapp = document.createElement('button');
+          avbrytKnapp.type = 'button';
+          avbrytKnapp.className = 'knapp sekundar liten-knapp';
+          avbrytKnapp.textContent = 'Avbryt';
+          avbrytKnapp.addEventListener('click', (e) => {
+            e.stopPropagation();
+            aktivTabellRedigeraNyckel = null;
+            ritaTabellVyRader();
+          });
+
+          const sparaKnapp = document.createElement('button');
+          sparaKnapp.type = 'button';
+          sparaKnapp.className = 'knapp liten-knapp';
+          sparaKnapp.textContent = 'Spara';
+          sparaKnapp.addEventListener('click', (e) => {
+            e.stopPropagation();
+            tabellAndraKommentarText(post, textruta.value);
+          });
+
+          knappRad.appendChild(avbrytKnapp);
+          knappRad.appendChild(sparaKnapp);
+          redigeraBox.appendChild(textruta);
+          redigeraBox.appendChild(knappRad);
+          tdKommentar.appendChild(redigeraBox);
+          setTimeout(() => textruta.focus(), 0);
+        } else {
+          const textDiv = document.createElement('div');
+          textDiv.textContent = k.innehall;
+          tdKommentar.appendChild(textDiv);
+
+          if (arEgen) {
+            const atgarderDiv = document.createElement('div');
+            atgarderDiv.className = 'tabell-cell-atgarder';
+
+            const andraKnapp = document.createElement('button');
+            andraKnapp.type = 'button';
+            andraKnapp.className = 'redigera-knapp';
+            andraKnapp.textContent = '✏️ Ändra';
+            andraKnapp.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (!kontrolleraEpostEllerVarna()) return;
+              aktivTabellRedigeraNyckel = radUnikNyckel;
+              aktivTabellSvaraNyckel = null;
+              ritaTabellVyRader();
+            });
+
+            const taBortKnapp = document.createElement('button');
+            taBortKnapp.type = 'button';
+            taBortKnapp.className = 'radera-knapp';
+            taBortKnapp.textContent = '🗑️ Ta bort';
+            taBortKnapp.addEventListener('click', (e) => {
+              e.stopPropagation();
+              tabellRaderaKommentar(post);
+            });
+
+            atgarderDiv.appendChild(andraKnapp);
+            atgarderDiv.appendChild(taBortKnapp);
+            tdKommentar.appendChild(atgarderDiv);
+          }
+        }
+        tr.appendChild(tdKommentar);
         // 6. Status (interaktiv väljare)
         const tdStatus = skapaTabellCell('status');
         const statusSelect = document.createElement('select');
@@ -6247,88 +6328,7 @@
         tdAtgardare.appendChild(fyllHandtag);
         tr.appendChild(tdAtgardare);
 
-        // 8. Författare (E-post)
-        const tdForfattare = skapaTabellCell('forfattare');
-        tdForfattare.style.fontWeight = '600';
-        tdForfattare.textContent = k.forfattare;
-        tr.appendChild(tdForfattare);
-
-        // 9. Kommentar
-        const tdKommentar = skapaTabellCell('kommentar');
-        tdKommentar.classList.add('cell-kommentar');
-
-        if (aktivTabellRedigeraNyckel === radUnikNyckel) {
-          const redigeraBox = document.createElement('div');
-          redigeraBox.className = 'tabell-redigera-box';
-          redigeraBox.addEventListener('click', (e) => e.stopPropagation());
-
-          const textruta = document.createElement('textarea');
-          textruta.value = k.innehall;
-
-          const knappRad = document.createElement('div');
-          knappRad.className = 'svar-formular-knappar';
-
-          const avbrytKnapp = document.createElement('button');
-          avbrytKnapp.type = 'button';
-          avbrytKnapp.className = 'knapp sekundar liten-knapp';
-          avbrytKnapp.textContent = 'Avbryt';
-          avbrytKnapp.addEventListener('click', (e) => {
-            e.stopPropagation();
-            aktivTabellRedigeraNyckel = null;
-            ritaTabellVyRader();
-          });
-
-          const sparaKnapp = document.createElement('button');
-          sparaKnapp.type = 'button';
-          sparaKnapp.className = 'knapp liten-knapp';
-          sparaKnapp.textContent = 'Spara';
-          sparaKnapp.addEventListener('click', (e) => {
-            e.stopPropagation();
-            tabellAndraKommentarText(post, textruta.value);
-          });
-
-          knappRad.appendChild(avbrytKnapp);
-          knappRad.appendChild(sparaKnapp);
-          redigeraBox.appendChild(textruta);
-          redigeraBox.appendChild(knappRad);
-          tdKommentar.appendChild(redigeraBox);
-          setTimeout(() => textruta.focus(), 0);
-        } else {
-          const textDiv = document.createElement('div');
-          textDiv.textContent = k.innehall;
-          tdKommentar.appendChild(textDiv);
-
-          if (arEgen) {
-            const atgarderDiv = document.createElement('div');
-            atgarderDiv.className = 'tabell-cell-atgarder';
-
-            const andraKnapp = document.createElement('button');
-            andraKnapp.type = 'button';
-            andraKnapp.className = 'redigera-knapp';
-            andraKnapp.textContent = '✏️ Ändra';
-            andraKnapp.addEventListener('click', (e) => {
-              e.stopPropagation();
-              if (!kontrolleraEpostEllerVarna()) return;
-              aktivTabellRedigeraNyckel = radUnikNyckel;
-              aktivTabellSvaraNyckel = null;
-              ritaTabellVyRader();
-            });
-
-            const taBortKnapp = document.createElement('button');
-            taBortKnapp.type = 'button';
-            taBortKnapp.className = 'radera-knapp';
-            taBortKnapp.textContent = '🗑️ Ta bort';
-            taBortKnapp.addEventListener('click', (e) => {
-              e.stopPropagation();
-              tabellRaderaKommentar(post);
-            });
-
-            atgarderDiv.appendChild(andraKnapp);
-            atgarderDiv.appendChild(taBortKnapp);
-            tdKommentar.appendChild(atgarderDiv);
-          }
-        }
-        tr.appendChild(tdKommentar);
+        
 
         // 10. Svar / Tråd
         const tdSvar = skapaTabellCell('svar');
