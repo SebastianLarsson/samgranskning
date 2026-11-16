@@ -292,13 +292,14 @@
       z-index: 2;
     }
     .pdf-custom-alternativ {
-      padding: 0.45rem 0.95rem;
+      padding: 0.35rem 0.65rem 0.35rem 0.95rem;
       color: #e2e8f0;
       font-size: 0.85rem;
       cursor: pointer;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
       border-bottom: 1px solid rgba(51, 65, 85, 0.35);
     }
     .pdf-custom-alternativ:hover {
@@ -309,6 +310,45 @@
       background: var(--accent);
       color: #fff;
       font-weight: 600;
+    }
+    .pdf-custom-alternativ-etikett {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .pdf-rad-ny-flik-knapp {
+      background: rgba(30, 41, 59, 0.9);
+      color: #93c5fd;
+      border: 1px solid #475569;
+      border-radius: 4px;
+      padding: 0.18rem 0.5rem;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      opacity: 0.75;
+      transition: background 0.12s, color 0.12s, border-color 0.12s, opacity 0.12s;
+    }
+    .pdf-custom-alternativ:hover .pdf-rad-ny-flik-knapp {
+      opacity: 1;
+    }
+    .pdf-rad-ny-flik-knapp:hover {
+      background: var(--gron);
+      border-color: #22c55e;
+      color: #fff;
+      opacity: 1;
+    }
+    .pdf-custom-alternativ.vald .pdf-rad-ny-flik-knapp {
+      background: rgba(15, 23, 42, 0.45);
+      border-color: rgba(255, 255, 255, 0.45);
+      color: #fff;
+      opacity: 1;
+    }
+    .pdf-custom-alternativ.vald .pdf-rad-ny-flik-knapp:hover {
+      background: var(--gron);
+      border-color: #22c55e;
     }
     .knapp {
       padding: 0.45rem 0.85rem;
@@ -1842,7 +1882,7 @@
 
       <div class="pdf-valjare-grupp" id="pdf-valjare-grupp">
         <div class="pdf-custom-dropdown">
-          <button type="button" id="pdf-custom-knapp" class="pdf-custom-knapp" disabled title="Välj PDF-dokument (byter i aktiv flik, eller öppnar ny flik om ➕ Ny flik är intryckt)">
+          <button type="button" id="pdf-custom-knapp" class="pdf-custom-knapp" disabled title="Välj PDF-dokument">
             <span id="pdf-custom-knapp-text" class="pdf-custom-knapp-text">-- Inlästa PDF-filer --</span>
             <span style="font-size: 0.7rem; color: #94a3b8;">▼</span>
           </button>
@@ -1857,9 +1897,6 @@
         <select id="pdf-valjare" disabled style="display: none;">
           <option value="">-- Inlästa PDF-filer --</option>
         </select>
-        <button type="button" id="oppna-ny-flik-lage-knapp" class="knapp sekundar" disabled title="Aktivera för att öppna nästa valda PDF i rullgardinsmenyn som en ny flik (max 8 flikar)">
-          ➕Ny flik
-        </button>
       </div>
 
 
@@ -2373,7 +2410,10 @@
     let inlastaFilerKarta = new Map();
     let filSenastAndradKarta = new Map();
     let jsonInnehallCache = new Map();
+
+    let sammanslagnaKommentarerCache = new Map();
     let mappHandtagCache = new Map();
+
     let pdfTillJsonNycklarKarta = new Map();
 
     let mappHandtag = null;
@@ -2452,7 +2492,7 @@
     const flikAntalEtikett = document.getElementById('flik-antal-etikett');
     const flikGransModal = document.getElementById('flik-grans-modal');
     const stangFlikGransKnapp = document.getElementById('stang-flik-grans-knapp');
-    const oppnaNyFlikLageKnapp = document.getElementById('oppna-ny-flik-lage-knapp');
+    
 
     const epostFalt = document.getElementById('epost-falt');
     const liveMappKnapp = document.getElementById('live-mapp-knapp');
@@ -3032,22 +3072,9 @@
       if (e.target === flikGransModal) flikGransModal.classList.remove('oppen');
     });
 
-    oppnaNyFlikLageKnapp.addEventListener('click', () => {
-      if (!oppnaNastaValINyFlik && oppnaFlikar.length >= MAX_ANTAL_FLIKAR) {
-        visaFlikGransModal();
-        return;
-      }
-      oppnaNastaValINyFlik = !oppnaNastaValINyFlik;
-      uppdateraNyFlikKnappUI();
-      if (oppnaNastaValINyFlik) {
-        pdfValjare.focus();
-      }
-    });
 
-    function uppdateraNyFlikKnappUI() {
-      oppnaNyFlikLageKnapp.classList.toggle('ny-flik-lage-aktiv', oppnaNastaValINyFlik);
-      oppnaNyFlikLageKnapp.textContent = oppnaNastaValINyFlik ? '➕ Välj PDF...' : '➕ Ny flik';
-    }
+	
+
 
     function sparaAktivFlikTillstand() {
       if (!aktivFlikId || aktivFlikId === INTRO_FLIK_ID) return;
@@ -3217,7 +3244,7 @@
       const befintligFlik = oppnaFlikar.find(f => f.pdfNyckel === pdfNyckel);
       if (befintligFlik) {
         oppnaNastaValINyFlik = false;
-        uppdateraNyFlikKnappUI();
+        
         await aktiveraFlik(befintligFlik.id);
         return;
       }
@@ -3228,7 +3255,7 @@
       if (skaSkapaNy) {
         if (oppnaFlikar.length >= MAX_ANTAL_FLIKAR) {
           oppnaNastaValINyFlik = false;
-          uppdateraNyFlikKnappUI();
+          
           pdfValjare.value = arPaIntroFlik ? '' : (aktuellPdfNyckel || '');
           visaFlikGransModal();
           return;
@@ -3251,7 +3278,7 @@
 
         oppnaFlikar.push(nyFlik);
         oppnaNastaValINyFlik = false;
-        uppdateraNyFlikKnappUI();
+        
         await aktiveraFlik(nyFlik.id);
       } else {
         const aktivFlik = oppnaFlikar.find(f => f.id === aktivFlikId);
@@ -3625,7 +3652,7 @@
         oppnaFlikar = [];
         aktivFlikId = null;
         oppnaNastaValINyFlik = false;
-        uppdateraNyFlikKnappUI();
+        
 
         synkIntervallValjare.disabled = false;
         synkaNuKnapp.disabled = false;
@@ -3642,36 +3669,40 @@
 
     async function lasMappRekursivt(katalogHandtag, prefix = '', utFilerKarta = new Map(), utAndradKarta = new Map(), lasInPdfFiler = true) {
       mappHandtagCache.set(prefix, katalogHandtag);
+      const filUppgifter = [];
+      const undermappUppgifter = [];
+
       for await (const post of katalogHandtag.values()) {
         const relativSokvag = prefix ? `${prefix}/${post.name}` : post.name;
         if (post.kind === 'file') {
           const gemener = post.name.toLowerCase();
-          if (prefix === '' && gemener === 'admin.txt') {
-            const fil = await post.getFile();
-            utFilerKarta.set('admin.txt', fil);
-            utAndradKarta.set('admin.txt', fil.lastModified);
-          } else if (prefix === '' && gemener === 'intro.txt') {
-            const fil = await post.getFile();
-            utFilerKarta.set('intro.txt', fil);
-            utAndradKarta.set('intro.txt', fil.lastModified);
+          if (prefix === '' && (gemener === 'admin.txt' || gemener === 'intro.txt')) {
+            filUppgifter.push(post.getFile().then(fil => {
+              utFilerKarta.set(gemener, fil);
+              utAndradKarta.set(gemener, fil.lastModified);
+            }));
           } else if (gemener.endsWith('.comments.json')) {
-            const fil = await post.getFile();
-            utFilerKarta.set(relativSokvag, fil);
-            utAndradKarta.set(relativSokvag, fil.lastModified);
-          } else if (gemener.endsWith('.pdf')) {
-            if (lasInPdfFiler || !inlastaFilerKarta.has(relativSokvag)) {
-              const fil = await post.getFile();
+            filUppgifter.push(post.getFile().then(fil => {
               utFilerKarta.set(relativSokvag, fil);
               utAndradKarta.set(relativSokvag, fil.lastModified);
+            }));
+          } else if (gemener.endsWith('.pdf')) {
+            if (lasInPdfFiler || !inlastaFilerKarta.has(relativSokvag)) {
+              filUppgifter.push(post.getFile().then(fil => {
+                utFilerKarta.set(relativSokvag, fil);
+                utAndradKarta.set(relativSokvag, fil.lastModified);
+              }));
             } else {
               utFilerKarta.set(relativSokvag, inlastaFilerKarta.get(relativSokvag));
               utAndradKarta.set(relativSokvag, filSenastAndradKarta.get(relativSokvag));
             }
           }
         } else if (post.kind === 'directory') {
-          await lasMappRekursivt(post, relativSokvag, utFilerKarta, utAndradKarta, lasInPdfFiler);
+          undermappUppgifter.push(lasMappRekursivt(post, relativSokvag, utFilerKarta, utAndradKarta, lasInPdfFiler));
         }
       }
+
+      await Promise.all([...filUppgifter, ...undermappUppgifter]);
       return { utFilerKarta, utAndradKarta };
     }
 
@@ -3881,7 +3912,7 @@
           const andrasSvar = (k.svar || []).filter(s => s.forfattare !== aktuellAnvandare);
           const egnaSvarForKommentar = minaSvar.filter(s => s.foralderId === k.id);
           k.svar = [...andrasSvar, ...egnaSvarForKommentar].sort((a, b) =>
-            (a.skapadVid || '').localeCompare(b.skapadVid || '')
+            ((a.skapadVid || '') < (b.skapadVid || '') ? -1 : ((a.skapadVid || '') > (b.skapadVid || '') ? 1 : 0))
           );
         }
 
@@ -3916,17 +3947,24 @@
         }
       }
 
-      const berordaPdfNycklar = [];
+const berordaPdfNycklar = new Set();
       for (const [pdfNyckel, jsonSet] of pdfTillJsonNycklarKarta.entries()) {
         for (const jsonNyckel of andradeJsonNycklar) {
           if (jsonSet.has(jsonNyckel)) {
-            berordaPdfNycklar.push(pdfNyckel);
+            berordaPdfNycklar.add(pdfNyckel);
+            sammanslagnaKommentarerCache.delete(pdfNyckel);
             break;
           }
         }
       }
 
-      if (aktuellPdfNyckel && (berordaPdfNycklar.includes(aktuellPdfNyckel) || andradeJsonNycklar.size === 0)) {
+      // Om filer tagits bort (andradeJsonNycklar kan då vara tom) rensas hela cachen för säkerhets skull
+      if (andradeJsonNycklar.size === 0 && harFilAndringar) {
+        sammanslagnaKommentarerCache.clear();
+      }
+
+      if (aktuellPdfNyckel && (berordaPdfNycklar.has(aktuellPdfNyckel) || andradeJsonNycklar.size === 0)) {
+        sammanslagnaKommentarerCache.delete(aktuellPdfNyckel);
         await uppdateraAktivPdfKommentarerVidSynk();
       }
 
@@ -4032,7 +4070,7 @@
       const fras = sokText.trim().toLowerCase();
       pdfCustomInnehall.querySelectorAll('.pdf-custom-alternativ').forEach(el => {
         const match = !fras || el.textContent.toLowerCase().includes(fras);
-        el.style.display = match ? 'block' : 'none';
+        el.style.display = match ? 'flex' : 'none';
       });
       pdfCustomInnehall.querySelectorAll('.pdf-custom-grupp-rubrik').forEach(rubrik => {
         let nasta = rubrik.nextElementSibling;
@@ -4088,13 +4126,36 @@
         const div = document.createElement('div');
         div.className = 'pdf-custom-alternativ';
         div.dataset.varde = nyckel;
-        div.textContent = etikett;
-        div.title = nyckel;
+        div.title = `${nyckel} (Klicka för att öppna i aktiv flik)`;
+
+        const textSpan = document.createElement('span');
+        textSpan.className = 'pdf-custom-alternativ-etikett';
+        textSpan.textContent = etikett;
+
+        const nyFlikKnapp = document.createElement('button');
+        nyFlikKnapp.type = 'button';
+        nyFlikKnapp.className = 'pdf-rad-ny-flik-knapp';
+        nyFlikKnapp.textContent = '➕ Ny flik';
+        nyFlikKnapp.title = 'Öppna denna PDF i en ny flik (max 8 flikar)';
+        nyFlikKnapp.addEventListener('click', (e) => {
+          e.stopPropagation();
+          stangCustomPdfLista();
+          if (oppnaFlikar.length >= MAX_ANTAL_FLIKAR && !oppnaFlikar.some(f => f.pdfNyckel === nyckel)) {
+            visaFlikGransModal();
+            return;
+          }
+          oppnaEllerBytTillPdfFlik(nyckel, { tvingaNyFlik: true });
+        });
+
+        div.appendChild(textSpan);
+        div.appendChild(nyFlikKnapp);
+
         div.addEventListener('click', () => {
           pdfValjare.value = nyckel;
           stangCustomPdfLista();
           pdfValjare.dispatchEvent(new Event('change'));
         });
+
         pdfCustomInnehall.appendChild(div);
       };
 
@@ -4139,7 +4200,7 @@
       const saknarPdf = pdfNycklar.length === 0;
       pdfValjare.disabled = saknarPdf;
       pdfCustomKnapp.disabled = saknarPdf;
-      oppnaNyFlikLageKnapp.disabled = saknarPdf;
+      
       tabellVyKnapp.disabled = saknarPdf;
       vaxlaSynlighetKnapp.disabled = saknarPdf;
       synkaCustomPdfKnappText();
@@ -4288,8 +4349,12 @@
       }
     }
 
-    async function hamtaSammanslagnaKommentarerForPdf(pdfNyckel) {
+	async function hamtaSammanslagnaKommentarerForPdf(pdfNyckel) {
+      if (sammanslagnaKommentarerCache.has(pdfNyckel)) {
+        return sammanslagnaKommentarerCache.get(pdfNyckel);
+      }
       const { sammanslagna } = await hamtaSammanslagnaKommentarerOchStatusForPdf(pdfNyckel);
+      sammanslagnaKommentarerCache.set(pdfNyckel, sammanslagna);
       return sammanslagna;
     }
 
@@ -4476,7 +4541,7 @@
           k.atgardareUppdateradAv = senasteAtg.uppdateradAv;
         }
         const trad = globalaSvarPerForalder.get(k.id) || [];
-        trad.sort((a, b) => (a.skapadVid || '').localeCompare(b.skapadVid || ''));
+        trad.sort((a, b) => ((a.skapadVid || '') < (b.skapadVid || '') ? -1 : ((a.skapadVid || '') > (b.skapadVid || '') ? 1 : 0)));
         k.svar = trad;
       }
 
@@ -5188,7 +5253,7 @@
         }
         if (oppnaNastaValINyFlik) {
           oppnaNastaValINyFlik = false;
-          uppdateraNyFlikKnappUI();
+         
           return;
         }
         if (handLageAktiv) {
@@ -5478,6 +5543,8 @@
           pdfTillJsonNycklarKarta.set(aktuellPdfNyckel, new Set());
         }
         pdfTillJsonNycklarKarta.get(aktuellPdfNyckel).add(sidecarNyckel);
+
+        sammanslagnaKommentarerCache.delete(aktuellPdfNyckel);
 
         harOsparadeAndringar = false;
         uppdateraSynkTidVisning('Sparad');
