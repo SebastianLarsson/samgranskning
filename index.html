@@ -427,6 +427,38 @@
       box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.4);
     }
 
+    /* --- KRYSSRUTA "GRANSKAT KLART" I VERKTYGSFÄLTET --- */
+    .granskning-klar-bricka {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #0f172a;
+      border: 1px solid #475569;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .granskning-klar-bricka:hover {
+      border-color: #64748b;
+      background: #162033;
+    }
+    .granskning-klar-bricka.ar-klar {
+      background: rgba(22, 163, 74, 0.2);
+      border-color: #22c55e;
+      color: #86efac;
+    }
+    .granskning-klar-bricka input[type="checkbox"] {
+      accent-color: var(--gron);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
     /* Slutdatum-bricka i övre listen */
     .slutdatum-bricka {
       display: none;
@@ -462,23 +494,62 @@
       color: #fca5a5;
     }
 
-    /* Synk- och autospar-bricka */
+    /* --- STÅENDE AUTOSYNK-RUTA I NEDRE VÄNSTRA HÖRNET --- */
     .synk-bricka {
-      display: inline-flex;
+      position: fixed;
+      bottom: 1rem;
+      left: 1rem;
+      z-index: 40;
+      width: 126px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.4rem;
+      background: rgba(15, 23, 42, 0.94);
+      border: 1px solid #334155;
+      padding: 0.55rem 0.5rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      color: #e2e8f0;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(6px);
+      user-select: none;
+    }
+    .synk-rubrik-rad {
+      display: flex;
       align-items: center;
-      gap: 0.45rem;
-      background: #0f172a;
+      gap: 0.4rem;
+      font-weight: 600;
+      color: #f8fafc;
+    }
+    .synk-kontroll-rad {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      width: 100%;
+    }
+    .synk-kontroll-rad select {
+      flex: 1;
+      min-width: 0;
+      padding: 0.28rem 0.25rem;
+      border-radius: 5px;
       border: 1px solid #475569;
-      padding: 0.25rem 0.6rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      color: #cbd5e1;
+      background: #1e293b;
+      color: #fff;
+      font-size: 0.76rem;
+      outline: none;
+      cursor: pointer;
+    }
+    .synk-kontroll-rad select:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
     }
     .synk-prick {
       width: 8px;
       height: 8px;
       border-radius: 50%;
       background: #64748b;
+      flex-shrink: 0;
     }
     .synk-prick.aktiv {
       background: #22c55e;
@@ -489,11 +560,14 @@
       box-shadow: 0 0 6px #eab308;
     }
     .synk-tid-text {
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       color: #93c5fd;
-      padding-left: 0.4rem;
-      border-left: 1px solid #334155;
+      padding-top: 0.35rem;
+      border-top: 1px solid #334155;
+      text-align: center;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* Verktygsväljare */
@@ -561,9 +635,8 @@
     /* --- STÅENDE FLYTANDE VERKTYGSRAD PÅ VÄNSTER SIDA --- */
     #nedre-verktygsrad {
       position: fixed;
-      top: 50%;
+      top: 6.2rem;
       left: 1rem;
-      transform: translateY(-50%);
       z-index: 40;
       display: none;
       flex-direction: column;
@@ -693,7 +766,7 @@
     #intro-visningsyta {
       flex: 1;
       overflow-y: auto;
-      padding: 2rem 1.5rem;
+      padding: 2rem 1.5rem 2rem 9.5rem;
       display: none;
       flex-direction: column;
       align-items: center;
@@ -1388,6 +1461,51 @@
       max-width: 210px;
     }
 
+    /* --- SEPARAT TABELL FÖR GRANSKARSTATUS I TABELLVYN --- */
+    .granskare-status-sektion {
+      background: #f8fafc;
+      border-bottom: 2px solid var(--kantlinje);
+      padding: 0.65rem 1.25rem;
+      flex-shrink: 0;
+    }
+    .granskare-status-rubrik {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.45rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .granskare-tabell-omslag {
+      max-height: 165px;
+      overflow-y: auto;
+      border: 1px solid var(--kantlinje);
+      border-radius: 6px;
+      background: #fff;
+    }
+    .granskare-status-tabell tbody tr {
+      cursor: default;
+    }
+    .klar-status-tagg {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .klar-status-tagg.ja {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+    .klar-status-tagg.nej {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
     /* --- BULKÅTGÄRDSLIST FÖR MARKERADE RADER --- */
     .bulk-atgards-rad {
       display: none;
@@ -1917,26 +2035,14 @@
       <button type="button" id="hantera-admin-knapp" class="knapp sekundar" style="display: none; padding: 0.35rem 0.65rem; font-size: 0.78rem;" title="Hantera granskningsinställningar (admin.txt och intro.txt)">
         ⚙️ Granskningsinställningar
       </button>
+      <label id="granskning-klar-behallare" class="granskning-klar-bricka" style="display: none;" title="Markera när du är färdig med din granskning">
+        <input type="checkbox" id="granskning-klar-cb" />
+        <span>Granskat klart</span>
+      </label>
 
       <div id="slutdatum-bricka" class="slutdatum-bricka" title="Granskningens slutdatum från intro.txt">
         <span id="slutdatum-text">Slutdatum: -</span>
         <span id="slutdatum-nedrakning" class="slutdatum-nedrakning"></span>
-      </div>
-
-      <div id="synk-bricka" class="synk-bricka" title="Synkar kommentarer i rotmappen automatiskt (pausar när fliken ligger i bakgrunden)">
-        <span id="synk-prick" class="synk-prick"></span>
-        <span>Autosynk:</span>
-        <select id="synk-intervall-valjare" disabled style="padding: 0.15rem 0.3rem; font-size: 0.78rem;">
-          <option value="0">Av</option>
-          <option value="5000">5 s</option>
-          <option value="10000" selected>10 s</option>
-          <option value="30000">30 s</option>
-          <option value="60000">60 s</option>
-        </select>
-        <button type="button" id="synka-nu-knapp" class="knapp sekundar" disabled style="padding: 0.2rem 0.45rem; font-size: 0.75rem;" title="Skanna om hela mappstrukturen (uppdaterar filstruktur.json) och alla kommentarer nu">
-          ↻
-        </button>
-        <span id="synk-tid-text" class="synk-tid-text">Ej kopplad</span>
       </div>
 
       <div class="pdf-valjare-grupp" id="pdf-valjare-grupp">
@@ -1988,14 +2094,14 @@
       <div class="tomt-lage">
         <h3>PDF-granskningsverktyg v1.0 (SMB/VPN-optimerat)</h3>
         <ol>
-          <li>Lägg PDF-filer som ska granskas i en filarea i en <strong>mapp</strong> (som kan ha undermappar). Första personen skapar automatiskt en delad indexfil (<code>filstruktur.json</code>) i rotmappen så att övriga deltagare laddar listan direkt utan att skanna undermappar (klicka på <strong>↻</strong> om nya PDF-filer läggs till).</li>
+          <li>Lägg PDF-filer som ska granskas i en filarea i en <strong>mapp</strong> (som kan ha undermappar). Första personen skapar automatiskt en delad indexfil (<code>filstruktur.json</code>) i rotmappen så att övriga deltagare laddar listan direkt utan att skanna undermappar (klicka på <strong>↻</strong> i <strong>Autosynk</strong>-rutan nere till vänster om nya PDF-filer läggs till).</li>
           <li>Skriv in din <strong>E-post</strong> i rutan längst upp till vänster (obligatoriskt). Din samlade kommentarfil sparas i rotmappen som <code>_granskning.&lt;din-epost&gt;.comments.json</code>.</li>
-          <li>Klicka på <strong>🔄 Öppna granskningsmapp</strong> för att koppla en gemensam mapp med automatisk bakgrundssynkning och direkt autosparande.</li>
-          <li>Klicka på Nål, Ruta eller Polygon för att peka ut ett ställe för en kommentar och sedan kommentera. Använd den flytande verktygsraden i <strong>nedre vänstra hörnet</strong> för att zooma (+/-), växla scrollhjulets funktion eller aktivera <strong>✋ Hand</strong> för att dra och panorera i inzoomat läge.</li>
+          <li>Klicka på <strong>🔄 Öppna granskningsmapp</strong> för att koppla en gemensam mapp med automatisk bakgrundssynkning och direkt autosparande. Kryssa i <strong>Granskat klart</strong> uppe i listen när du är färdig med din granskning.</li>
+          <li>Klicka på Nål, Ruta eller Polygon för att peka ut ett ställe för en kommentar och sedan kommentera. Använd den flytande verktygsraden på <strong>vänster sida</strong> för att zooma (+/-), växla scrollhjulets funktion eller aktivera <strong>✋ Hand</strong> för att dra och panorera i inzoomat läge.</li>
           <li>Klicka på <strong>➕ Ny flik</strong> bredvid en fil i PDF-listan om du vill öppna dokumentet i en ny flik högst upp (upp till 8 PDF-flikar samtidigt, dra-och-släpp för att byta ordning). Dina öppna flikar sparas automatiskt till nästa gång du öppnar samma mapp.</li>
           <li>Alla nya kommentarer får automatiskt statusen <strong>Ny kommentar</strong> (Rosa). Byt status direkt i rullgardinsmenyn på respektive kommentar eller när du svarar i tråden. Vill ni styra vilka som får ändra status samt lägga in en introduktion (<code>intro.txt</code>) och slutdatum? Klicka på <strong>🔒 Skapa admin.txt</strong> / <strong>⚙️ Granskningsinställningar</strong> i verktygsfältet.</li>
           <li>Behöver en enskild sida vridas? Håll musen över sidan och klicka på <strong>↻ Rotera 90°</strong> uppe till höger på sidan – alla nålar och rutor räknas om automatiskt och rotationen sparas.</li>
-          <li>Klicka på <strong>📋 Tabellvy</strong> längst upp till höger för att sortera, filtrera, tilldela <strong>Åtgärdare</strong> (dra i cellhörnet nedåt eller markera flera rader för bulkändring), svara, ändra status och exportera samtliga kommentarer i alla PDF-filer.</li>
+          <li>Klicka på <strong>📋 Tabellvy</strong> längst upp till höger för att se vilka deltagare som markerat <strong>Granskat klart</strong> samt sortera, filtrera, tilldela <strong>Åtgärdare</strong> (dra i cellhörnet nedåt eller markera flera rader för bulkändring), svara, ändra status och exportera samtliga kommentarer i alla PDF-filer.</li>
         </ol>
         <div class="status-forklaring-lista">
           <strong>Tillgängliga granskningsstatusar:</strong>
@@ -2015,7 +2121,7 @@
             <p>- Noll uppladdning: Inga PDF-filer, ritningar, kommentarer, filnamn eller e-postadresser skickas någonsin till GitHub Pages eller någon annan extern part där sidan ligger. All sparning sker direkt tillbaka till den lokala granskningsmappen via webbläsarens File System Access API.</p>
             <p><strong>Vad utbyts mellan verktyget och den lokala filarean?</strong></p>
             <p>Läsning: Verktyget skannar den mapp (och dess undermappar) som du aktivt väljer i mappväljaren, eller läser direkt från den cachade indexfilen <code>filstruktur.json</code> i rotmappen. Endast filer som slutar på .pdf samt kommentar- och konfigurationsfiler (<code>filstruktur.json</code>, <code>_granskning.*.comments.json</code>, <code>admin.txt</code> och <code>intro.txt</code> i rotmappen) läses in av verktyget.</p>
-            <p>Skrivning (Autosparande): När du skapar eller uppdaterar en kommentar, ett svar, en åtgärdare eller en status skapar/uppdaterar verktyget din personliga json-fil i rotmappen med namnet <code>_granskning.&lt;din-epost&gt;.comments.json</code> (samt <code>filstruktur.json</code> vid indexering). Original-PDF:erna ändras aldrig.</p>
+            <p>Skrivning (Autosparande): När du skapar eller uppdaterar en kommentar, ett svar, en åtgärdare, en status eller markerar <strong>Granskat klart</strong> skapar/uppdaterar verktyget din personliga json-fil i rotmappen med namnet <code>_granskning.&lt;din-epost&gt;.comments.json</code> (samt <code>filstruktur.json</code> vid indexering). Original-PDF:erna ändras aldrig.</p>
             <p>- Lokal webbläsarlagring (localStorage): För användarvänlighet sparas din angivna e-postadress, dina valda tabellkolumner samt namnen på dina senast öppna flikar lokalt i din egen webbläsare.</p>
             <p><strong>Åtkomst och behörigheter</strong></p>
             <p>- Verktygets behörighet till granskningsmappen är tillfällig och gäller endast under den aktiva webbläsarsessionen. När du stänger webbläsaren återkallas åtkomsten automatiskt, och du måste aktivt godkänna mappåtkomsten på nytt vid nästa tillfälle.</p>
@@ -2025,7 +2131,7 @@
       </div>
     </div>
 
-    <!-- LITEN FLYTANDE VERKTYGSRAD I NEDRE VÄNSTRA HÖRNET -->
+    <!-- LITEN FLYTANDE VERKTYGSRAD PÅ VÄNSTER SIDA -->
     <div id="nedre-verktygsrad" role="toolbar" aria-label="Navigering och zoom">
       <div class="nedre-sektion">
         <button type="button" id="hand-lage-knapp" class="nedre-knapp" disabled title="Handverktyg: Klicka och dra över PDF-sidan för att flytta dig (panorera)">
@@ -2065,6 +2171,27 @@
           Scrollhjul: Zooma
         </button>
       </div>
+    </div>
+
+    <!-- STÅENDE AUTOSYNK-RUTA I NEDRE VÄNSTRA HÖRNET -->
+    <div id="synk-bricka" class="synk-bricka" title="Synkar kommentarer i rotmappen automatiskt (pausar när fliken ligger i bakgrunden)">
+      <div class="synk-rubrik-rad">
+        <span id="synk-prick" class="synk-prick"></span>
+        <span>Autosynk</span>
+      </div>
+      <div class="synk-kontroll-rad">
+        <select id="synk-intervall-valjare" disabled aria-label="Synkintervall">
+          <option value="0">Av</option>
+          <option value="5000">5 s</option>
+          <option value="10000" selected>10 s</option>
+          <option value="30000">30 s</option>
+          <option value="60000">60 s</option>
+        </select>
+        <button type="button" id="synka-nu-knapp" class="knapp sekundar" disabled style="padding: 0.28rem 0.45rem; font-size: 0.76rem;" title="Skanna om hela mappstrukturen (uppdaterar filstruktur.json) och alla kommentarer nu">
+          ↻
+        </button>
+      </div>
+      <span id="synk-tid-text" class="synk-tid-text">Ej kopplad</span>
     </div>
 
     <aside>
@@ -2239,6 +2366,30 @@
             </div>
             <div id="kolumn-kryssrutor-lista"></div>
           </div>
+        </div>
+      </div>
+
+      <!-- SEPARAT TABELL: GRANSKAT KLART PER ANVÄNDARE -->
+      <div class="granskare-status-sektion">
+        <div class="granskare-status-rubrik">
+          <span>👥 Granskningsstatus per deltagare</span>
+          <span id="granskare-klar-sammanfattning" style="font-weight: normal; color: #475569;"></span>
+          <button type="button" id="granskare-exportera-knapp" class="knapp sekundar liten-knapp" style="margin-left: auto;" title="Exportera deltagarnas granskningsstatus som CSV">
+            📥 Exportera deltagarstatus (.csv)
+          </button>
+        </div>
+        <div class="granskare-tabell-omslag">
+          <table class="kommentar-tabell granskare-status-tabell">
+            <thead>
+              <tr>
+                <th>Granskare (E-post)</th>
+                <th>Granskat klart</th>
+                <th>Antal kommentarer</th>
+                <th>Senast uppdaterad</th>
+              </tr>
+            </thead>
+            <tbody id="granskare-status-kropp"></tbody>
+          </table>
         </div>
       </div>
 
@@ -2524,9 +2675,7 @@ if (window.pdfjsLib) {
     }
 
     /* --- TILLSTÅNDSVARIABLER FÖR FILER, CACHE OCH SYNKNING --- */
-    // pdfHandtagKarta: pdfNyckel -> FileSystemFileHandle (fylls vid full skanning eller lat när PDF:en öppnas)
     let pdfHandtagKarta = new Map();
-    // rotFilerKarta: 'admin.txt' | 'intro.txt' | '_granskning.<epost>.comments.json' -> File
     let rotFilerKarta = new Map();
     let rotFilSenastAndradKarta = new Map();
     let anvandarDataCache = new Map();
@@ -2542,6 +2691,7 @@ if (window.pdfjsLib) {
     let introFritext = '';
     let synkarNu = false;
     let harOsparadeAndringar = false;
+    let minGranskningKlar = 'Nej';
 
     // Köhantering för autosparande
     let autosparaFördröjningsTimer = null;
@@ -2616,6 +2766,8 @@ if (window.pdfjsLib) {
 
     const epostFalt = document.getElementById('epost-falt');
     const liveMappKnapp = document.getElementById('live-mapp-knapp');
+    const granskningKlarBehallare = document.getElementById('granskning-klar-behallare');
+    const granskningKlarCb = document.getElementById('granskning-klar-cb');
     const pdfValjare = document.getElementById('pdf-valjare');
     const slutdatumBricka = document.getElementById('slutdatum-bricka');
     const slutdatumText = document.getElementById('slutdatum-text');
@@ -2660,6 +2812,9 @@ if (window.pdfjsLib) {
     const tabellFilterStatus = document.getElementById('tabell-filter-status');
     const tabellVyHuvudRad = document.getElementById('tabell-vy-huvud-rad');
     const tabellVyKropp = document.getElementById('tabell-vy-kropp');
+    const granskareStatusKropp = document.getElementById('granskare-status-kropp');
+    const granskareKlarSammanfattning = document.getElementById('granskare-klar-sammanfattning');
+    const granskareExporteraKnapp = document.getElementById('granskare-exportera-knapp');
     const tabellMarkeraAllaCb = document.getElementById('tabell-markera-alla-cb');
     const bulkAtgardsRad = document.getElementById('bulk-atgards-rad');
     const bulkAntalBricka = document.getElementById('bulk-antal-bricka');
@@ -2773,6 +2928,78 @@ if (window.pdfjsLib) {
         }
       }
     }
+
+    /* --- GRANSKAT KLART PER ANVÄNDARE --- */
+    function uppdateraGranskningKlarUI() {
+      if (!mappHandtag) {
+        granskningKlarBehallare.style.display = 'none';
+        return;
+      }
+      granskningKlarBehallare.style.display = 'inline-flex';
+      const arJa = minGranskningKlar === 'Ja';
+      granskningKlarCb.checked = arJa;
+      granskningKlarBehallare.classList.toggle('ar-klar', arJa);
+    }
+
+    async function synkaMinGranskningKlarFranDisk() {
+      const aktuellAnvandare = hamtaAktuellEpost();
+      if (!mappHandtag || !arGiltigEpost(aktuellAnvandare)) {
+        minGranskningKlar = 'Nej';
+        uppdateraGranskningKlarUI();
+        return;
+      }
+      const filnamn = hamtaAnvandarFilnamn(aktuellAnvandare);
+      const fil = rotFilerKarta.get(filnamn);
+      if (fil) {
+        try {
+          const data = await hamtaEllerLasAnvandarFilData(filnamn, fil);
+          minGranskningKlar = data.granskning_klar === 'Ja' ? 'Ja' : 'Nej';
+        } catch (_) {
+          minGranskningKlar = 'Nej';
+        }
+      } else {
+        minGranskningKlar = 'Nej';
+      }
+      uppdateraGranskningKlarUI();
+    }
+
+    async function sparaAnvandarensGranskningKlar() {
+      const aktuellAnvandare = kontrolleraEpostEllerVarna();
+      if (!aktuellAnvandare || !mappHandtag) {
+        granskningKlarCb.checked = (minGranskningKlar === 'Ja');
+        return;
+      }
+
+      minGranskningKlar = granskningKlarCb.checked ? 'Ja' : 'Nej';
+      uppdateraGranskningKlarUI();
+
+      while (spararTillDisk) {
+        await vantaMs(50);
+      }
+
+      spararTillDisk = true;
+      try {
+        const dataObjekt = await hamtaEllerInitieraAnvandarDataForSkrivning(aktuellAnvandare);
+        dataObjekt.granskning_klar = minGranskningKlar;
+        await skrivAnvandarFilTillRotmapp(aktuellAnvandare, dataObjekt);
+        uppdateraSynkTidVisning('Sparad');
+
+        if (tabellVyModal.classList.contains('oppen')) {
+          await ritaGranskareStatusTabell();
+        }
+      } catch (fel) {
+        console.error('Kunde inte spara granskning_klar:', fel);
+        alert('Kunde inte spara status för Granskat klart: ' + fel.message);
+      } finally {
+        spararTillDisk = false;
+        if (vantandeSparaEfterAktuell) {
+          vantandeSparaEfterAktuell = false;
+          sparaAktuellAnvandaresKommentarer();
+        }
+      }
+    }
+
+    granskningKlarCb.addEventListener('change', sparaAnvandarensGranskningKlar);
 
     /* --- SLUTDATUM & NEDRÄKNING + INTRO.TXT-INLÄSNING --- */
     function beraknaNedrakningInfo(datumStrang) {
@@ -3727,6 +3954,7 @@ if (window.pdfjsLib) {
       return {
         version: 2,
         forfattare: epost,
+        granskning_klar: minGranskningKlar || 'Nej',
         senastUppdaterad: new Date().toISOString(),
         dokument: {}
       };
@@ -3741,9 +3969,11 @@ if (window.pdfjsLib) {
       }
       const text = await fil.text();
       const parsed = JSON.parse(text);
+      const arKlar = parsed.granskning_klar === 'Ja' || parsed.granskning_klar === true;
       const normaliserad = {
         version: 2,
         forfattare: (parsed.forfattare || epost).trim().toLowerCase(),
+        granskning_klar: arKlar ? 'Ja' : 'Nej',
         senastUppdaterad: parsed.senastUppdaterad || '',
         dokument: (parsed.dokument && typeof parsed.dokument === 'object') ? parsed.dokument : {}
       };
@@ -3838,7 +4068,6 @@ if (window.pdfjsLib) {
       }
     });
 
-    // Platt bredden-först-kö som indexerar alla PDF-handtag i filträdet + rotmappens konfig/kommentarfiler
     async function skannaFiltradPlattKo(rotHandtag) {
       const nyaPdfHandtag = new Map();
       const rotPosterAttHamta = [];
@@ -3892,7 +4121,6 @@ if (window.pdfjsLib) {
       return { nyaPdfHandtag, nyaRotFiler, nyaRotAndradTider };
     }
 
-    // Läser enbart rotmappen + filstruktur.json om den finns; skapar filstruktur.json vid första inläsningen eller vid tvingad omskanning
     async function lasRotmappOchFilstruktur(rotHandtag, tvingaOmskanning = false, arForstaInlasning = false) {
       const rotPosterAttHamta = [];
       let filstrukturHandtag = null;
@@ -3932,7 +4160,7 @@ if (window.pdfjsLib) {
             sorteraPdfNycklar(pdfSokvagar);
             return {
               pdfSokvagar,
-              nyaPdfHandtag: new Map(), // Fylls på lat via hamtaPdfHandtagFranSokvag()
+              nyaPdfHandtag: new Map(),
               nyaRotFiler,
               nyaRotAndradTider,
               franCache: true
@@ -3971,7 +4199,6 @@ if (window.pdfjsLib) {
           await skrivbar.close();
         });
       } catch (skrivFel) {
-        // Om användaren bara har läsrättigheter fungerar allt ändå lokalt i sessionen
         console.warn('Kunde inte spara filstruktur.json (ev. skrivskyddad mapp):', skrivFel);
       }
 
@@ -3984,7 +4211,7 @@ if (window.pdfjsLib) {
       };
     }
 
-    // Lättviktssynk: läser ENDAST rotmappens konfig- och användarfiler (rör inga undermappar eller PDF:er)
+    // Lättviktssynk: läser ENDAST rotmappens konfig- och användarfiler (rör aldrig filstruktur.json eller undermappar)
     async function synkaEndastRotmapp() {
       if (!mappHandtag || synkarNu || spararTillDisk) return;
       synkarNu = true;
@@ -4040,6 +4267,7 @@ if (window.pdfjsLib) {
 
         const adminAndrad = await lasInAdminKonfig(rotFilerKarta);
         const introAndrad = await lasInIntroKonfig(rotFilerKarta);
+        await synkaMinGranskningKlarFranDisk();
 
         if (introAndrad) {
           if (!introFilFinns && aktivFlikId === INTRO_FLIK_ID) {
@@ -4103,6 +4331,7 @@ if (window.pdfjsLib) {
 
         await lasInAdminKonfig(rotFilerKarta);
         await lasInIntroKonfig(rotFilerKarta);
+        await synkaMinGranskningKlarFranDisk();
         sammanslagnaKommentarerCache.clear();
 
         if (arForstaInlasning) {
@@ -4509,7 +4738,7 @@ if (window.pdfjsLib) {
             pdfDokument: null,
             pdfObjectUrl: null
           }));
-          if (sparadeFlikarData.aktivFlikId === INTRO_FLIK_ID && introFilFinns) {
+          if (introFilFinns) {
             await aktiveraIntroFlik();
           } else {
             const malFlik = oppnaFlikar.find(f => f.pdfNyckel === sparadeFlikarData.aktivPdfNyckel) || oppnaFlikar[0];
@@ -4652,7 +4881,7 @@ if (window.pdfjsLib) {
         console.error('Misslyckades att visa PDF:', fel);
         const arSaknadFil = fel.name === 'NotFoundError';
         const tipsText = arSaknadFil
-          ? 'Filen verkar ha flyttats eller tagits bort sedan filstruktur.json skapades. Klicka på ↻ (uppdatera) i övre listen för att skanna om mappstrukturen.'
+          ? 'Filen verkar ha flyttats eller tagits bort sedan filstruktur.json skapades. Klicka på ↻ i Autosynk-rutan nere till vänster för att skanna om mappstrukturen.'
           : 'Kontrollera nätverks- eller VPN-anslutningen och försök igen.';
         pdfVisningsyta.innerHTML = `<div class="tomt-lage"><h3>⚠️ Kunde inte ladda PDF-filen</h3><p style="color:var(--text-dold);margin-top:0.4rem;">${tipsText} (${fel.message})</p></div>`;
       }
@@ -5753,6 +5982,7 @@ if (window.pdfjsLib) {
           return {
             version: 2,
             forfattare: aktuellAnvandare,
+            granskning_klar: minGranskningKlar || data.granskning_klar || 'Nej',
             senastUppdaterad: new Date().toISOString(),
             dokument: { ...(data.dokument || {}) }
           };
@@ -5768,6 +5998,7 @@ if (window.pdfjsLib) {
       const nuIso = new Date().toISOString();
       dataObjekt.version = 2;
       dataObjekt.forfattare = aktuellAnvandare;
+      dataObjekt.granskning_klar = (dataObjekt.granskning_klar === 'Ja' || minGranskningKlar === 'Ja') ? 'Ja' : 'Nej';
       dataObjekt.senastUppdaterad = nuIso;
 
       // Rensa bort tomma dokumentblock så filen hålls kompakt
@@ -6008,6 +6239,101 @@ if (window.pdfjsLib) {
 
     tabellExporteraKnapp.addEventListener('click', exporteraAllaPdfTillCsv);
 
+    /* --- SEPARAT TABELL: GRANSKAT KLART PER DELTAGARE + CSV-EXPORT --- */
+    async function ritaGranskareStatusTabell() {
+      if (!granskareStatusKropp) return;
+      granskareStatusKropp.innerHTML = '';
+
+      const anvandarPoster = await hamtaAllaAnvandarDataPoster();
+      anvandarPoster.sort((a, b) => a.forfattare.localeCompare(b.forfattare, 'sv'));
+
+      const kommentarAntalPerEpost = new Map();
+      for (const post of allaMappKommentarerCache) {
+        const epost = post.kommentar.forfattare;
+        kommentarAntalPerEpost.set(epost, (kommentarAntalPerEpost.get(epost) || 0) + 1);
+      }
+
+      if (anvandarPoster.length === 0) {
+        granskareKlarSammanfattning.textContent = '(Inga deltagarfiler skapade ännu)';
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 4;
+        td.style.color = '#64748b';
+        td.style.textAlign = 'center';
+        td.textContent = 'Ingen deltagare har sparat kommentarer eller markerat granskningen som klar ännu.';
+        tr.appendChild(td);
+        granskareStatusKropp.appendChild(tr);
+        return;
+      }
+
+      let antalKlara = 0;
+      const fragment = document.createDocumentFragment();
+
+      for (const post of anvandarPoster) {
+        const arJa = post.granskning_klar === 'Ja';
+        if (arJa) antalKlara++;
+
+        const tr = document.createElement('tr');
+
+        const tdEpost = document.createElement('td');
+        tdEpost.style.fontWeight = '600';
+        tdEpost.textContent = post.forfattare;
+
+        const tdKlar = document.createElement('td');
+        const tagg = document.createElement('span');
+        tagg.className = 'klar-status-tagg ' + (arJa ? 'ja' : 'nej');
+        tagg.textContent = arJa ? '✅ Ja' : '⏳ Nej';
+        tdKlar.appendChild(tagg);
+
+        const tdAntal = document.createElement('td');
+        tdAntal.textContent = kommentarAntalPerEpost.get(post.forfattare) || 0;
+
+        const tdTid = document.createElement('td');
+        tdTid.style.color = '#64748b';
+        tdTid.textContent = post.senastUppdaterad
+          ? new Date(post.senastUppdaterad).toLocaleString('sv-SE')
+          : '-';
+
+        tr.appendChild(tdEpost);
+        tr.appendChild(tdKlar);
+        tr.appendChild(tdAntal);
+        tr.appendChild(tdTid);
+        fragment.appendChild(tr);
+      }
+
+      granskareStatusKropp.appendChild(fragment);
+      granskareKlarSammanfattning.textContent = `(${antalKlara} av ${anvandarPoster.length} granskare klara)`;
+    }
+
+    async function exporteraGranskareStatusTillCsv() {
+      const anvandarPoster = await hamtaAllaAnvandarDataPoster();
+      if (anvandarPoster.length === 0) {
+        alert('Det finns inga deltagare att exportera ännu.');
+        return;
+      }
+
+      anvandarPoster.sort((a, b) => a.forfattare.localeCompare(b.forfattare, 'sv'));
+
+      const kommentarAntalPerEpost = new Map();
+      for (const post of allaMappKommentarerCache) {
+        const epost = post.kommentar.forfattare;
+        kommentarAntalPerEpost.set(epost, (kommentarAntalPerEpost.get(epost) || 0) + 1);
+      }
+
+      const rubriker = ['Granskare (E-post)', 'Granskat klart', 'Antal kommentarer', 'Senast uppdaterad'];
+      const rader = anvandarPoster.map(post => [
+        post.forfattare,
+        post.granskning_klar === 'Ja' ? 'Ja' : 'Nej',
+        kommentarAntalPerEpost.get(post.forfattare) || 0,
+        post.senastUppdaterad ? new Date(post.senastUppdaterad).toLocaleString('sv-SE') : ''
+      ]);
+
+      const datumStämpel = new Date().toISOString().slice(0, 10);
+      laddaNerCsvFil(rubriker, rader, `granskarstatus-${datumStämpel}.csv`);
+    }
+
+    granskareExporteraKnapp.addEventListener('click', exporteraGranskareStatusTillCsv);
+
     /* --- KOLUMNVÄLJARE FÖR TABELLVYN --- */
     function byggKolumnValjareMenyDOM() {
       kolumnKryssrutorLista.innerHTML = '';
@@ -6219,6 +6545,7 @@ if (window.pdfjsLib) {
 
       uppdateraTabellFilterAlternativ();
       uppdateraTabellSorteringsRubrikerUI();
+      await ritaGranskareStatusTabell();
       ritaTabellVyRader();
     }
 
@@ -6306,7 +6633,6 @@ if (window.pdfjsLib) {
       }
     }
 
-    // Samlar ihop samtliga dokumentändringar till EN filskrivning i rotmappen
     async function uppdateraAtgardareForPoster(posterLista, nyAtgardareRaw) {
       if (!Array.isArray(posterLista) || posterLista.length === 0) return;
       const aktuellAnvandare = kontrolleraEpostEllerVarna();
@@ -6374,7 +6700,6 @@ if (window.pdfjsLib) {
       ritaTabellVyRader();
     }
 
-    // Samlar ihop samtliga statusändringar till EN filskrivning i rotmappen
     async function uppdateraStatusForPoster(posterLista, nyStatus) {
       if (!Array.isArray(posterLista) || posterLista.length === 0 || !GRANSKNINGS_STATUSAR[nyStatus]) return;
       const aktuellAnvandare = kontrolleraEpostEllerVarna();
@@ -7883,6 +8208,7 @@ if (window.pdfjsLib) {
     epostFalt.addEventListener('input', async () => {
       uppdateraEpostFaltUtseende();
       uppdateraRollBrickaUI();
+      await synkaMinGranskningKlarFranDisk();
       lastKommentarId = null;
       aktivtSvarKommentarId = null;
       aktivTabellRedigeraNyckel = null;
